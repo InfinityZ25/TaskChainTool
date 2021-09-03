@@ -18,7 +18,7 @@ public class TaskChainTool {
         return queue.isEmpty();
     }
 
-    public Runnable pool() {
+    public Runnable poll() {
         return queue.poll();
     }
 
@@ -77,23 +77,29 @@ public class TaskChainTool {
     public CompletableFuture<Boolean> execute() {
         return CompletableFuture.supplyAsync(() -> {
             /** Loop to execute all tasks in order. */
-            while (!queue.isEmpty()) {
-                var nextRunnable = queue.poll();
-                var thread = new Thread(nextRunnable);
-                try {
-                    /**
-                     * Join the thread so that it waits until whatever needs to be executed gets
-                     * executed.
-                     */
-                    thread.start();
-                    thread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            while (!queue.isEmpty())
+                handleRunnable(poll());
 
-            }
             return true;
         });
     }
 
+    /**
+     * Function that executes all tasks in the queue.
+     * 
+     * @param nextRunnable
+     */
+    public void handleRunnable(Runnable nextRunnable) {
+        var thread = new Thread(nextRunnable);
+        try {
+            /**
+             * Join the thread so that it waits until whatever needs to be executed gets
+             * executed.
+             */
+            thread.start();
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
