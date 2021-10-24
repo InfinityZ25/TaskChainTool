@@ -29,6 +29,14 @@ public class BukkitTCT extends TaskChainTool {
     }
 
     /**
+     * A static method that creates an empty bukkit task chain object.
+     */
+    public static BukkitTCT create() {
+        return new BukkitTCT();
+    }
+    
+
+    /**
      * Helper method to check if plugin instance is ready.
      * 
      * @return true if plugin instance is ready, false otherwise

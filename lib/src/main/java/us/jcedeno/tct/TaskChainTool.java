@@ -17,6 +17,12 @@ public class TaskChainTool {
     public boolean isEmpty() {
         return queue.isEmpty();
     }
+    /**
+     * A static method that creates an empty task chain object.
+     */
+    public static TaskChainTool create() {
+        return new TaskChainTool();
+    }
 
     public Runnable poll() {
         return queue.poll();
